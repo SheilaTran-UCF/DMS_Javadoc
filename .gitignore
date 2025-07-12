@@ -19,6 +19,9 @@ target/
 *.iml
 *.ipr
 
+# Ignore database files
+*.db
+
 ### NetBeans ###
 /nbproject/private/
 /nbbuild/

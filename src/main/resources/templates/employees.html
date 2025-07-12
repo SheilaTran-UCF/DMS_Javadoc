@@ -1,10 +1,29 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+  <title>Employees</title>
+  <link rel="stylesheet" href="/style.css">
 </head>
 <body>
-$END$
+<h1>All Employees</h1>
+<table>
+  <tr>
+    <th>ID</th><th>Name</th><th>Position</th><th>Salary</th><th>Hire Date</th><th>Department</th><th>Status</th><th>Actions</th>
+  </tr>
+  <tr th:each="emp : ${employees}">
+    <td th:text="${emp.id}"></td>
+    <td th:text="${emp.name}"></td>
+    <td th:text="${emp.position}"></td>
+    <td th:text="${emp.salary}"></td>
+    <td th:text="${emp.hireDate}"></td>
+    <td th:text="${emp.department}"></td>
+    <td th:text="${emp.active ? 'Active' : 'Inactive'}"></td>
+    <td>
+      <a th:href="@{'/update/' + ${emp.id}}">Edit</a> |
+      <a th:href="@{'/delete/' + ${emp.id}}" onclick="return confirm('Delete this employee?')">Delete</a>
+    </td>
+  </tr>
+</table>
+<p><a href="/">Back to Home</a></p>
 </body>
 </html>
