@@ -1,12 +1,58 @@
 <!DOCTYPE html>
+<!-- Declare the document type as HTML5 -->
+
+<!--
+=====================================================================
+ Professor   : Ashley Evans
+ Author      : Minh Ngoc Tran
+ Course      : 202530-CEN-3024C-31774
+ Date        : July 15th, 2025
+
+ error.html
+ Description : This is the generic error page for the Employee
+               Management System web application. It is displayed
+               when an unexpected error occurs, such as a database
+               connection failure or missing data.
+
+ Technologies:
+   - Thymeleaf templating engine (namespace included for consistency,
+     though not used in this static page).
+   - External CSS stylesheet for consistent page styling.
+
+ Key Features:
+   - Clear, user-friendly error message informing the user that
+     something went wrong.
+   - Suggestion for the user to check their database connection
+     or data integrity.
+   - Navigation link for returning to the Home page.
+
+=====================================================================
+-->
+
+
 <html xmlns:th="http://www.thymeleaf.org">
+<!-- Open the HTML document and define the Thymeleaf namespace -->
+
 <head>
     <title>Error</title>
+    <!-- Set the page title shown in the browser tab -->
+
     <link rel="stylesheet" href="/style.css">
+    <!-- Link to an external CSS stylesheet for page styling -->
 </head>
+
 <body>
+<!-- Start the body section -->
+
 <h1>Something went wrong!</h1>
+<!-- Display a large heading message indicating an error has occurred -->
+
 <p>Check your database connection or data.</p>
+<!-- Display a message suggesting what might be wrong -->
+
 <p><a href="/">Back to Home</a></p>
+<!-- Link to return the user to the home page -->
+
 </body>
 </html>
+<!-- End of the HTML document -->

@@ -1,18 +1,181 @@
 <!DOCTYPE html>
+<!-- Declare this document as HTML5 -->
+
+<!--
+=====================================================================
+ Professor   : Ashley Evans
+ Author      : Minh Ngoc Tran
+ Course      : 202530-CEN-3024C-31774
+ Date        : July 15th, 2025
+
+ tenure-report.html
+ Description : This is the Employee Tenure Report page for the Employee
+               Tracker web application. It displays employees grouped
+               by their tenure ranges in a clear, styled report format.
+
+ Technologies:
+   - Thymeleaf templating engine for dynamic data binding, conditional
+     rendering, and looping through employee tenure groups.
+   - Embedded internal CSS for table styling, headings, link styles,
+     and layout formatting.
+   - Font Awesome for back navigation icons.
+   - Spring Boot backend provides a Map<String, List<Employee>> model
+     attribute named 'tenureGroups' for rendering.
+
+ Key Features:
+   - Conditional error message display when no tenure data is available.
+   - Iterates through each tenure group and dynamically generates a
+     section with the tenure range, employee count, and a table listing
+     each employee’s details.
+   - Responsive, clean, and user-friendly layout.
+   - Back-to-home navigation link with Font Awesome icon.
+   - Custom internal CSS for consistent presentation without external
+     dependency on the site’s main stylesheet.
+
+=====================================================================
+-->
+
+
 <html xmlns:th="http://www.thymeleaf.org">
+<!-- Open the HTML document and include the Thymeleaf namespace -->
+
 <head>
-    <title>Tenure Report</title>
-    <link rel="stylesheet" href="/style.css">
+    <title>Employee Tenure Report</title>
+    <!-- Page title shown in browser tab -->
+
+    <link rel="stylesheet" th:href="@{/style.css}">
+    <!-- Link to external stylesheet (resolved by Thymeleaf at runtime) -->
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Link to Font Awesome for icons -->
+
+    <style>
+        /* Internal CSS styling for tables, headings, links, and text */
+
+        table {
+            border-collapse: collapse;
+            width: 90%;
+            margin-bottom: 40px;
+        }
+
+        th, td {
+            border: 1px solid #999;
+            padding: 8px 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #a3c0fd;
+            color: #0e52e1;
+        }
+
+        h1 {
+            color: #ed8e1d;
+        }
+
+        h2 {
+            margin-top: 40px;
+            margin-bottom: 5px;
+            color: rgb(228, 104, 38);
+        }
+
+        .count {
+            margin-bottom: 15px;
+            font-weight: bold;
+            color: rgb(68, 119, 228);
+        }
+
+        a.back-link {
+            margin-top: 30px;
+            display: inline-block;
+            font-weight: bold;
+            text-decoration: none;
+            color: #007BFF;
+        }
+
+        a.back-link:hover {
+            text-decoration: underline;
+        }
+
+        a {
+            color: #e46826;
+            font-size: 30px;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+
+        nav {
+            margin-bottom: 20px;
+        }
+    </style>
 </head>
+
 <body>
-<h1>Employee Tenure Report</h1>
-<table>
-    <tr><th>Tenure Range</th><th>Employee Count</th></tr>
-    <tr th:each="entry : ${tenureGroups}">
-        <td th:text="${entry.key}"></td>
-        <td th:text="${entry.value}"></td>
-    </tr>
-</table>
-<p><a href="/">Back to Home</a></p>
+
+<!-- Navigation bar (if needed, you can add links here) -->
+<nav>
+    <!-- nav links with th:href go here if desired -->
+</nav>
+
+<hr/>
+
+<!-- Error message block if tenureGroups is null or empty -->
+<div th:if="${tenureGroups == null or #lists.isEmpty(tenureGroups)}"
+     style="color: red; font-weight: bold; margin: 40px 0;">
+    Something went wrong!<br/>
+    Check your database connection or data.<br/>
+    <a th:href="@{/}" style="color: #007BFF; font-weight: bold; text-decoration: none;">Back to Home</a>
+</div>
+
+<!-- Report content block, displayed if tenureGroups contains data -->
+<div th:if="${tenureGroups != null and !#lists.isEmpty(tenureGroups)}">
+
+    <!-- Page main heading -->
+    <h1>Employee Tenure Report</h1>
+
+    <!-- Loop through each tenure group (Map.Entry<String, List<Employee>>) -->
+    <div th:each="entry : ${tenureGroups}">
+
+        <!-- Tenure range group title -->
+        <h2 th:text="${entry.key}">Tenure Range</h2>
+
+        <!-- Display number of employees in this group -->
+        <div class="count">
+            Number of Employees: <span th:text="${#lists.size(entry.value)}">0</span>
+        </div>
+
+        <!-- Employee table for this tenure group -->
+        <table>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Position</th>
+                <th>Salary</th>
+                <th>Hire Date</th>
+                <th>Department</th>
+                <th>Active</th>
+            </tr>
+            </thead>
+
+            <!-- Table body: loop through employees in this tenure group -->
+            <tbody>
+            <tr th:each="emp : ${entry.value}">
+                <td th:text="${emp.id}">1</td>
+                <td th:text="${emp.name}">Name</td>
+                <td th:text="${emp.position}">Position</td>
+                <td th:text="${#numbers.formatDecimal(emp.salary, 0, 'COMMA', 2, 'POINT')}">$0.00</td>
+                <td th:text="${emp.hireDate}">2023-01-01</td>
+                <td th:text="${emp.department}">Department</td>
+                <td th:text="${emp.active} ? 'Yes' : 'No'">Yes</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Link to return to home page -->
+<p><a th:href="@{/}"><i class="fas fa-arrow-left"></i> Back to Home</a></p>
+
 </body>
 </html>

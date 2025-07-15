@@ -1,15 +1,199 @@
 <!DOCTYPE html>
+<!-- Declare this document as HTML5 -->
+
+<!--
+=====================================================================
+ Author      : Minh Ngoc Tran
+ Course      : 202530-CEN-3024C-31774
+ Professor   : Ashley Evans
+ Date        : July 15th, 2025
+
+ index.html
+ Description : This is the Welcome (Home) Page for the Employee
+               Tracker web application. It provides users with
+               a visually engaging landing page featuring animated
+               sun and cloud graphics, a heading, and navigation
+               buttons to access other parts of the system.
+
+ Technologies:
+   - Thymeleaf templating engine for dynamic navigation links.
+   - Embedded CSS for layout styling, animations, and responsive
+     design.
+   - CSS keyframe animations for sun rotation, pulsing effect,
+     and cloud movement.
+
+ Key Features:
+   - Animated sun and moving cloud graphic for a friendly, inviting
+     user experience.
+   - Large, bold page heading introducing the Employee Tracker system.
+   - Navigation buttons linking to the Employee List and Tenure
+     Report pages using Thymeleaf URL expressions.
+   - Responsive design that adjusts button layout on smaller screens.
+
+=====================================================================
+-->
+
+
 <html xmlns:th="http://www.thymeleaf.org">
+<!-- Open the HTML document and include the Thymeleaf namespace -->
+
 <head>
-    <title>DMS Home</title>
-    <link rel="stylesheet" href="/style.css">
+    <title>Welcome to Employee Tracker App</title>
+    <!-- Set the page title shown in the browser tab -->
+
+    <style>
+        /* CSS styles for page layout, animation, and appearance */
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(to top, #b3e5fc, #e1f5fe);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 40px;
+            font-weight: 800;
+            font-family: "American Typewriter";
+            color: #efa24a;
+        }
+
+        /* Container for buttons with spacing */
+        .btn-container {
+            display: flex;
+            gap: 30px;
+        }
+
+        /* Style for button links */
+        a.button {
+            display: inline-block;
+            padding: 18px 40px;
+            font-size: 1.45rem;
+            text-decoration: none;
+            color: white;
+            background-color: #f19529;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(228, 202, 60, 0.5);
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+            font-weight: 600;
+            text-align: center;
+            min-width: 180px;
+        }
+
+        /* Hover effect for buttons */
+        a.button:hover {
+            background-color: #eaa24c;
+            box-shadow: 0 6px 15px rgba(228, 202, 60, 0.5);
+        }
+
+        /* Responsive adjustments for small screens */
+        @media (max-width: 500px) {
+            .btn-container {
+                flex-direction: column;
+                gap: 20px;
+            }
+            a.button {
+                width: 100%;
+                min-width: unset;
+            }
+        }
+
+        /* Container for animated sun and cloud graphic */
+        .sky {
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            width: 150px;
+            height: 120px;
+        }
+
+        /* Sun graphic styling */
+        .sun {
+            width: 60px;
+            height: 60px;
+            background: #ffd93d;
+            border-radius: 50%;
+            box-shadow: 0 0 20px #ffd93d, 0 0 40px #ffd93d;
+            position: absolute;
+            top: 0;
+            left: 0;
+            animation: rotate 12s linear infinite, pulse 2s ease-in-out infinite alternate;
+        }
+
+        /* Rotation animation for sun */
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Pulsing glow effect for sun */
+        @keyframes pulse {
+            0% { box-shadow: 0 0 20px #ffd93d, 0 0 40px #ffd93d; }
+            100% { box-shadow: 0 0 30px #ffd93d, 0 0 60px #ffd93d; }
+        }
+
+        /* Cloud container styling and movement animation */
+        .cloud {
+            position: absolute;
+            top: 50px;
+            left: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: cloudMove 30s linear infinite;
+        }
+
+        /* Cloud movement animation across the screen */
+        @keyframes cloudMove {
+            0% { transform: translateX(0); }
+            50% { transform: translateX(200px); }
+            100% { transform: translateX(0); }
+        }
+
+        /* Individual cloud parts (small circles) */
+        .cloud-part {
+            width: 35px;
+            height: 35px;
+            background: #ffffff;
+            border-radius: 50%;
+            margin-right: -10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+    </style>
 </head>
+
 <body>
-<h1>Employee Management DMS</h1>
-<ul>
-    <li><a href="/employees">View All Employees</a></li>
-    <li><a href="/add">Add New Employee</a></li>
-    <li><a href="/tenure">View Tenure Report</a></li>
-</ul>
+
+<!-- Animated Sky Graphic -->
+<div class="sky">
+    <!-- Sun element with animation -->
+    <div class="sun"></div>
+
+    <!-- Cloud container with multiple cloud parts -->
+    <div class="cloud">
+        <div class="cloud-part"></div>
+        <div class="cloud-part"></div>
+        <div class="cloud-part"></div>
+    </div>
+</div>
+
+<!-- Welcome Page Heading -->
+<h1>Welcome to Employee Tracker</h1>
+
+<!-- Navigation Buttons Section -->
+<div class="btn-container">
+    <!-- Button link to Employee List page using Thymeleaf -->
+    <a th:href="@{/employees}" class="button">View Employee List</a>
+
+    <!-- Button link to Tenure Report page using Thymeleaf -->
+    <a th:href="@{/tenure}" class="button">View Tenure Report</a>
+</div>
+
 </body>
 </html>
