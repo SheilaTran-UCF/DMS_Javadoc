@@ -5,7 +5,7 @@ package com.addingdatabase.assigment_dms_phase4;
  * Professor: Ashley Evans
  * Author: Minh Ngoc Tran
  * Course: 202530-CEN-3024C-31774
- * Date: July15 2025
+ * Date: July 15, 2025
  *
  * AssigmentDmsPhase4Application.java
  *
@@ -20,9 +20,7 @@ package com.addingdatabase.assigment_dms_phase4;
  * Usage:
  * When the application starts, it asks for the SQLite file path via the console.
  * The input is used to configure the datasource URL before the application fully boots up.
- *
  */
-
 
 // Import Spring Boot application classes
 import org.springframework.boot.SpringApplication;
@@ -35,7 +33,14 @@ import java.util.Scanner;
 @SpringBootApplication
 public class AssigmentDmsPhase4Application {
 
-    // Main method - application entry point
+    /**
+     * The main method is the entry point of the Spring Boot application.
+     * It prompts the user to enter the SQLite database file path,
+     * validates the input, sets the Spring datasource URL property dynamically,
+     * and then launches the Spring Boot application.
+     *
+     * @param args Command line arguments passed to the application.
+     */
     public static void main(String[] args) {
         // Create a Scanner object to read user input from the console
         Scanner scanner = new Scanner(System.in);

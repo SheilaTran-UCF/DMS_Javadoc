@@ -99,7 +99,7 @@
 
         a {
             color: #e46826;
-            font-size: 30px;
+            font-size: 20px;
             text-decoration: none;
             margin: 0 5px;
         }
@@ -112,10 +112,18 @@
 
 <body>
 
-<!-- Navigation bar (if needed, you can add links here) -->
-<nav>
-    <!-- nav links with th:href go here if desired -->
-</nav>
+    <!-- Navigation menu links -->
+    <nav style="margin-bottom: 20px;">
+        <!-- Home link -->
+        <a th:href="@{/}">🏠 Home</a> |
+        <!-- Employee list page link -->
+        <a th:href="@{/employees}">📋 Employee List</a> |
+        <!-- Add new employee link -->
+        <a th:href="@{/add}">➕ Add Employee</a> |
+        <!-- Tenure report page link -->
+        <a th:href="@{/tenure}">📊 Tenure Report</a>
+    </nav>
+
 
 <hr/>
 

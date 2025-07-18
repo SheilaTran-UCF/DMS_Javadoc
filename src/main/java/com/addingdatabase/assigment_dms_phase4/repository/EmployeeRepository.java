@@ -1,11 +1,10 @@
-// Package declaration: defines the package this class belongs to
 package com.addingdatabase.assigment_dms_phase4.repository;
 
 /**
  * Professor: Ashley Evans
  * Author: Minh Ngoc Tran
  * Course: 202530-CEN-3024C-31774
- * Date: July15 2025
+ * Date: July 15, 2025
  *
  * EmployeeRepository.java
  *
@@ -24,43 +23,46 @@ package com.addingdatabase.assigment_dms_phase4.repository;
  * Usage:
  * This class is annotated with @Repository, allowing Spring to detect and manage it as a data
  * access component. It is typically called from the service layer to handle database operations.
- *
- * Note:
- * - This implementation uses plain JDBC for direct control over database operations,
- *   providing flexibility for managing SQLite’s special behaviors (such as AUTOINCREMENT sequence resets).
- *
  */
 
-// Import the Employee entity class
 import com.addingdatabase.assigment_dms_phase4.model.Employee;
-// Import Spring's @Repository annotation to mark this class as a data access component
 import org.springframework.stereotype.Repository;
 
-// Import Java SQL libraries for database connection and result handling
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-// Mark this class as a repository bean for Spring’s dependency injection
 @Repository
 public class EmployeeRepository {
 
-    // SQLite database connection URL (file path to your SQLite database)
-    private final String url = "jdbc:sqlite:/Users/minhtran/Desktop/CEN-3024C/Module_10/Assigment_DMS_Phase4/dms.db";
+    /**
+     * Retrieves the SQLite database URL from system properties.
+     *
+     * @return the SQLite connection URL
+     * @throws IllegalStateException if the URL is not properly configured
+     */
+    private String getUrl() {
+        String url = System.getProperty("spring.datasource.url");
+        if (url == null || url.isBlank()) {
+            throw new IllegalStateException("❌ Database URL is not set. Please provide a valid SQLite path.");
+        }
+        return url;
+    }
 
-    // ✅ Retrieve all employee records from the database
+    /**
+     * Retrieves all employee records from the database.
+     *
+     * @return a list of all employees
+     */
     public List<Employee> findAll() {
-        // List to hold all Employee objects retrieved from the database
         List<Employee> employees = new ArrayList<>();
         System.out.println(">>> EmployeeRepository.findAll() called");
 
-        // Try-with-resources block to automatically close database connections and statements
-        try (Connection conn = DriverManager.getConnection(url);
+        try (Connection conn = DriverManager.getConnection(getUrl());
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery("SELECT * FROM employees")) {
 
-            // Loop through the result set and build Employee objects from each row
             while (rs.next()) {
                 Employee e = new Employee(
                         rs.getLong("id"),
@@ -71,23 +73,23 @@ public class EmployeeRepository {
                         rs.getString("department"),
                         rs.getBoolean("active")
                 );
-                // Add each Employee object to the list
                 employees.add(e);
             }
             System.out.println(">>> Found " + employees.size() + " employees.");
 
         } catch (SQLException e) {
-            // Print SQL exception details to console if an error occurs
             e.printStackTrace();
         }
 
-        // Return the complete list of employees
         return employees;
     }
 
-    // ✅ Save a new employee or update an existing employee
+    /**
+     * Saves a new employee to the database or updates an existing one.
+     *
+     * @param e the employee object to save or update
+     */
     public void save(Employee e) {
-        // If id is null, prepare an INSERT query; otherwise, prepare an UPDATE query
         String sql = (e.getId() == null) ?
                 "INSERT INTO employees(name, position, salary, hire_date, department, active) VALUES (?, ?, ?, ?, ?, ?)" :
                 "UPDATE employees SET name=?, position=?, salary=?, hire_date=?, department=?, active=? WHERE id=?";
@@ -95,11 +97,9 @@ public class EmployeeRepository {
         System.out.println(">>> Save operation for: " + (e.getId() == null ? "INSERT" : "UPDATE"));
         System.out.println(">>> Employee: " + e);
 
-        // Open a database connection and prepare the statement
-        try (Connection conn = DriverManager.getConnection(url);
+        try (Connection conn = DriverManager.getConnection(getUrl());
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-            // Set parameters for the prepared statement from the Employee object's fields
             pstmt.setString(1, e.getName());
             pstmt.setString(2, e.getPosition());
             pstmt.setDouble(3, e.getSalary());
@@ -107,12 +107,10 @@ public class EmployeeRepository {
             pstmt.setString(5, e.getDepartment());
             pstmt.setBoolean(6, e.isActive());
 
-            // If it's an update operation, set the id as the last parameter
             if (e.getId() != null) {
                 pstmt.setLong(7, e.getId());
             }
 
-            // Execute the INSERT or UPDATE statement
             pstmt.executeUpdate();
 
         } catch (SQLException ex) {
@@ -121,20 +119,21 @@ public class EmployeeRepository {
         }
     }
 
-    // ✅ Find a specific employee by ID
+    /**
+     * Finds a single employee by their unique ID.
+     *
+     * @param id the ID of the employee to retrieve
+     * @return the employee if found, or null if not found
+     */
     public Employee findById(Long id) {
-        // SQL query to select a single employee record by its ID
         String sql = "SELECT * FROM employees WHERE id = ?";
 
-        // Open a database connection and prepare the statement
-        try (Connection conn = DriverManager.getConnection(url);
+        try (Connection conn = DriverManager.getConnection(getUrl());
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-            // Set the ID parameter in the prepared statement
             pstmt.setLong(1, id);
             ResultSet rs = pstmt.executeQuery();
 
-            // If a matching employee is found, build and return an Employee object
             if (rs.next()) {
                 return new Employee(
                         rs.getLong("id"),
@@ -151,25 +150,23 @@ public class EmployeeRepository {
             ex.printStackTrace();
         }
 
-        // Return null if no employee is found with the given ID
         return null;
     }
 
-    // ✅ Delete an employee by ID and reset sequence number
+    /**
+     * Deletes an employee by their ID and resets the SQLite AUTOINCREMENT sequence.
+     *
+     * @param id the ID of the employee to delete
+     */
     public void deleteById(Long id) {
-        // SQL query to delete a specific employee by ID
         String sql = "DELETE FROM employees WHERE id = ?";
 
-        // Open a database connection and prepare the statement
-        try (Connection conn = DriverManager.getConnection(url);
+        try (Connection conn = DriverManager.getConnection(getUrl());
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-            // Set the ID parameter in the prepared statement
             pstmt.setLong(1, id);
-            // Execute the DELETE statement
             pstmt.executeUpdate();
 
-            // After deletion, reset the AUTOINCREMENT sequence value
             resetEmployeeSequence();
 
         } catch (SQLException ex) {
@@ -177,16 +174,16 @@ public class EmployeeRepository {
         }
     }
 
-    // ✅ Reset SQLite's AUTOINCREMENT sequence to avoid gaps after deletion
+    /**
+     * Resets the SQLite sequence for the employees table based on the current max ID.
+     * This helps maintain continuity for AUTOINCREMENT values.
+     */
     public void resetEmployeeSequence() {
-        // SQL query to reset the AUTOINCREMENT sequence to the highest existing ID
         String sql = "UPDATE sqlite_sequence SET seq = (SELECT MAX(id) FROM employees) WHERE name = 'employees'";
 
-        // Open a database connection and execute the sequence update
-        try (Connection conn = DriverManager.getConnection(url);
+        try (Connection conn = DriverManager.getConnection(getUrl());
              Statement stmt = conn.createStatement()) {
 
-            // Execute the update statement to reset the sequence
             stmt.executeUpdate(sql);
             System.out.println(">>> SQLite sequence reset for 'employees'");
 

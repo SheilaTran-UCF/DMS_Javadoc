@@ -184,31 +184,28 @@
     <!-- Name input field -->
     <label for="name">Name:</label>
     <input type="text" id="name" th:field="*{name}" placeholder="Enter full name" required>
-    <!-- Display validation error for name if exists -->
     <div class="error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name Error</div>
 
     <!-- Position input field -->
     <label for="position">Position:</label>
     <input type="text" id="position" th:field="*{position}" placeholder="Enter position" required>
-    <!-- Display validation error for position if exists -->
     <div class="error" th:if="${#fields.hasErrors('position')}" th:errors="*{position}">Position Error</div>
 
     <!-- Salary input field -->
     <label for="salary">Salary:</label>
     <input type="number" id="salary" th:field="*{salary}" step="0.01" min="0" placeholder="Enter salary" required>
-    <!-- Display validation error for salary if exists -->
     <div class="error" th:if="${#fields.hasErrors('salary')}" th:errors="*{salary}">Salary Error</div>
 
     <!-- Hire Date input field -->
     <label for="hireDate">Hire Date:</label>
-    <input type="date" id="hireDate" th:field="*{hireDate}" required>
-    <!-- Display validation error for hire date if exists -->
-    <div class="error" th:if="${#fields.hasErrors('hireDate')}" th:errors="*{hireDate}">Date Error</div>
+    <input type="date" id="hireDate" th:field="*{hireDate}"
+           max="${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}" required>
+    <div class="error" th:if="${dateError}" th:text="${dateError}">Invalid date</div>
+
 
     <!-- Department input field -->
     <label for="department">Department:</label>
     <input type="text" id="department" th:field="*{department}" placeholder="Enter department" required>
-    <!-- Display validation error for department if exists -->
     <div class="error" th:if="${#fields.hasErrors('department')}" th:errors="*{department}">Department Error</div>
 
     <!-- Checkbox for 'Active' status -->
@@ -217,12 +214,13 @@
         Active
     </label>
 
-    <!-- Submit button with dynamic text: 'Add Employee' or 'Update Employee' -->
+    <!-- Submit button -->
     <button type="submit" th:text="${employee.id == null} ? 'Add Employee' : 'Update Employee'">Submit</button>
 </form>
 
-<!-- Back to home link with icon -->
+<!-- Back to home link -->
 <p><a th:href="@{/}"><i class="fas fa-arrow-left"></i> Back to Home</a></p>
 
 </body>
+
 </html>
