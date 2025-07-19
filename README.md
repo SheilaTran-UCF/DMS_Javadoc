@@ -52,22 +52,13 @@ Assigment_DMS_Phase4/</br>
 
 ## 🧾 How to Generate Javadoc
 
-### Option 1: Using IntelliJ IDEA
+### Option Using IntelliJ IDEA
 
 1. Go to `Tools → Generate JavaDoc...`
 2. Select your Java files or packages.
 3. Choose the output directory (e.g., `docs/` or `target/site/apidocs/`)
 4. Click `OK`.
 
-### Option 2: Using Maven (Command Line)
-
-If you use Maven, run:
-
-```bash
-mvn javadoc:javadoc
-
-This will generate the HTML documentation under:
-target/site/apidocs/index.html
 
 🧪 How to View the Docs
 Navigate to the target/site/apidocs folder.
